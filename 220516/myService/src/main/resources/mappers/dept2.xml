@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.myservice.dao.Dept2Dao">
+    <select id="selectAll" parameterType="com.example.myservice.model.Dept2"
+            resultType="com.example.myservice.model.Dept2">
+       SELECT DNO
+             , DNAME
+             , LOC
+        FROM DEPARTMENT2
+    </select>
+
+    <select id="selectById" parameterType="int"
+            resultType="com.example.myservice.model.Dept2">
+        SELECT DNO
+             , DNAME
+             , LOC
+        FROM DEPARTMENT2
+        WHERE DNO = #{dno}
+    </select>
+
+    <insert id="insert" parameterType="com.example.myservice.model.Dept2">
+        <selectKey keyProperty="dno" resultType="int" order="BEFORE">
+            SELECT SQ_DEPT2.NEXTVAL FROM DUAL
+        </selectKey>
+
+        INSERT INTO DEPARTMENT2(DNO, DNAME, LOC)
+        VALUES(#{dno}, #{dname}, #{loc})
+    </insert>
+
+    <update id="update" parameterType="com.example.myservice.model.Dept2">
+        UPDATE DEPARTMENT2
+        SET dname = #{dname},
+            loc = #{loc}
+        WHERE DNO = #{dno}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM DEPARTMENT2
+        WHERE DNO = #{dno}
+    </delete>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+

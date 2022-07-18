@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.eunsi.dao.CustomerDao">
+
+    <select id="findAll" resultType="com.example.eunsi.model.Customer">
+        SELECT ID
+             , FIRST_NAME
+             , LAST_NAME
+             , EMAIL
+             , PHONE
+             , DELETE_YN
+             , INSERT_TIME
+             , UPDATE_TIME
+             , DELETE_TIME
+        FROM TB_CUSTOMER
+        WHERE DELETE_YN = 'N'
+    </select>
+
+    <select id="findById" parameterType="long" resultType="com.example.eunsi.model.Customer">
+        SELECT ID
+             , FIRST_NAME
+             , LAST_NAME
+             , EMAIL
+             , PHONE
+             , DELETE_YN
+             , INSERT_TIME
+             , UPDATE_TIME
+             , DELETE_TIME
+        FROM TB_CUSTOMER
+        WHERE DELETE_YN = 'N'
+          AND ID = #{id}
+    </select>
+
+    <insert id="insertCustomer" parameterType="com.example.eunsi.model.Customer">
+        INSERT INTO TB_CUSTOMER ( ID
+        , FIRST_NAME
+        , LAST_NAME
+        , EMAIL
+        , PHONE
+        , INSERT_TIME
+        ) VALUES (
+        SQ_CUSTOMER.NEXTVAL
+        , #{firstName}
+        , #{lastName}
+        , #{email}
+        , #{phone}
+        , TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24-MI-SS')
+        )
+
+        <selectKey keyProperty="id" resultType="long" order="AFTER">
+            SELECT SQ_CUSTOMER.CURRVAL FROM DUAL
+        </selectKey>
+    </insert>
+
+    <update id="updateCustomer" parameterType="com.example.eunsi.model.Customer">
+        UPDATE TB_CUSTOMER
+        SET FIRST_NAME  = #{firstName}
+          , LAST_NAME   = #{lastName}
+          , EMAIL       = #{email}
+          , PHONE       = #{phone}
+          , UPDATE_TIME = TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24-MI-SS')
+        WHERE ID = #{id}
+    </update>
+
+    <update id="deleteCustomer" parameterType="long">
+        UPDATE TB_CUSTOMER
+        SET DELETE_YN   = 'Y'
+          , DELETE_TIME = TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24-MI-SS')
+        WHERE ID = #{id}
+    </update>
+
+    <update id="deleteAll">
+        UPDATE TB_CUSTOMER
+        SET DELETE_YN   = 'Y'
+          , DELETE_TIME = TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24-MI-SS')
+    </update>
+
+</mapper>
+

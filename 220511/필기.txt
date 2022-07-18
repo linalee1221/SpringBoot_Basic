@@ -1,0 +1,32 @@
+1. 핵심 : 스프링 웹에서 <-> DB와 연동방법
+(CRUD : INSERT, SELECT, UPDATE, DELETE)
+구현하는 방법
+  1) 일반 JDBC 연동 : 제일 안좋음
+  2) 스프링에서 제공하는 JDBC 연동 : 쓸만하지만 추천하진 않는다
+  3) JPA를 이용한 연동 : 요즘 뜨고 있다
+     - JPA에서 제공하는 함수를 호출하면 DB에 SQL쿼리를 자동으로 만들어준다
+     - 추천을 하지 않는 이유는 성능에 문제가 생길 수 있다 =` 자동 SQL문
+  4) MYBATIS를 이용한 연동 : 추천
+(1,2,3은 복잡하고 4는 간단명료함)
+
+2. 기타 : 세션, 인터셉터, 리다이렉트, UPLOAD
+
+
+
+REST API : 웹에서(HTTP) 데이터를 제공, 수정, 삭제, 생성을 하기 위한 통신 방법
+1) Create(Insert) : Post방식
+2) Read(Select) : Get방식
+3) Update : Put방식
+4) Delete(Delete) : Delete방식
+
+
+JSP/HTML + SPRING = 프로그램개발(과거)
+->타임리프 언어 : 스프링부트에서 지원하는 언어
+REST API 구조 : JSON파일로 통신함(현재)
+Vue/React ---- JSON파일형태 ---- Spring(DB)
+
+JSON 파일 형태
+	{
+	     "ID": "les911221",
+	     "name" : "이은송"
+	}

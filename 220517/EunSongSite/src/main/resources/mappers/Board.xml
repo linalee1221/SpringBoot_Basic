@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.eunsongsite.dao.BoardDao">
+
+    <sql id="boardColumns">
+        IDX,
+        TITLE,
+        CONTENT,
+        WRITER,
+        VIEW_CNT,
+        NOTICE_YN,
+        SECRET_YN,
+        DELETE_YN,
+        INSERT_TIME,
+        UPDATE_TIME,
+        DELETE_TIME
+    </sql>
+
+    <insert id="insertBoard" parameterType="com.example.eunsongsite.model.BoardDto">
+        INSERT INTO TB_BOARD_SSONG (
+            <include refid="boardColumns"></include>
+        ) VALUES (
+        SQ_TB_BOARD_SSONG.NEXTVAL,
+        #{title},
+        #{content},
+        #{writer},
+        0,
+        'N',
+        'N',
+        'N',
+        SYSDATE,
+        null,
+        null
+        )
+    </insert>
+
+    <select id="selectBoardDetail" parameterType="Long" resultType="com.example.eunsongsite.model.BoardDto">
+        SELECT
+            <include refid="boardColumns"></include>
+        FROM
+        TB_BOARD_SSONG
+        WHERE DELETE_YN = 'N'
+        AND IDX = #{idx}
+    </select>
+
+
+    <select id="selectBoardAllList" parameterType="com.example.eunsongsite.model.BoardDto"
+            resultType="com.example.eunsongsite.model.BoardDto">
+        SELECT
+            <include refid="boardColumns"></include>
+        FROM
+        TB_BOARD_SSONG
+        WHERE DELETE_YN = 'N'
+        ORDER BY
+        NOTICE_YN ASC, IDX DESC, INSERT_TIME DESC
+    </select>
+
+    <update id="deleteBoard" parameterType="Long">
+        UPDATE TB_BOARD_SSONG
+        SET
+            DELETE_YN = 'Y',
+            DELETE_TIME = SYSDATE
+        WHERE
+            IDX = #{idx}
+    </update>
+
+    <select id="selectBoardTotalCount" parameterType="com.example.eunsongsite.model.BoardDto"
+            resultType="int">
+        SELECT
+            COUNT(*)
+        FROM TB_BOARD_SSONG
+        WHERE DELETE_YN = 'N'
+    </select>
+
+    <update id="updateBoard" parameterType="com.example.eunsongsite.model.BoardDto">
+        UPDATE TB_BOARD_SSONG
+        SET
+            UPDATE_TIME = SYSDATE,
+            TITLE = #{title},
+            CONTENT = #{content},
+            WRITER = #{writer},
+            NOTICE_YN = NVL(#{noticeYn}, 'N'),
+            SECRET_YN = NVL(#{secretYn}, 'N')
+    </update>
+
+    <select id="selectBoardList" parameterType="com.example.eunsongsite.model.BoardDto"
+            resultType="com.example.eunsongsite.model.BoardDto">
+<!--    <![CDATA[-->
+<!--        SELECT *-->
+<!--        FROM (-->
+<!--            SELECT ROWNUM R, TBB.*-->
+<!--            FROM TB_BOARD_SSONG TBB-->
+<!--            WHERE ROWNUM <= #{currentPageNo} * #{recordsPerPage}-->
+<!--            AND DELETE_YN = 'N'-->
+<!--            ORDER BY NOTICE_YN ASC, IDX DESC, INSERT_TIME DESC-->
+<!--        )-->
+<!--        WHERE R > (#{currentPageNo}-1)*#{recordsPerPage}-->
+<!--    ]]>-->
+
+
+        SELECT *
+        FROM (
+            SELECT ROWNUM R, TBB.*
+            FROM TB_BOARD_SSONG TBB
+            WHERE ROWNUM &lt;= #{currentPageNo} * #{recordsPerPage}
+            AND DELETE_YN = 'N'
+            ORDER BY NOTICE_YN ASC, IDX DESC, INSERT_TIME DESC
+        )
+        WHERE R &gt; (#{currentPageNo}-1)*#{recordsPerPage}
+        <include refid="Common.search"></include>
+
+
+    </select>
+
+</mapper>
+

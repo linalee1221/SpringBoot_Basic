@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- 인터페이스 CommentDao 를 상속받아 구현하는 xml 파일 -->
+<mapper namespace="com.example.eunsongsite.dao.CommentDao">
+
+    <sql id="commentColumns">
+        IDX,
+        BOARD_IDX,
+        CONTENT,
+        WRITER,
+        DELETE_YN,
+        INSERT_DATE AS INSERT_TIME,
+        UPDATE_DATE AS UPDATE_TIME,
+        DELETE_DATE AS DELETE_TIME
+    </sql>
+    
+    <select id="selectCommentDetail" parameterType="Long"
+            resultType="com.example.eunsongsite.model.CommentDto">
+        SELECT
+            <include refid="commentColumns"></include>
+        FROM
+            TB_COMMENT_SSONG
+        WHERE DELETE_YN = 'N'
+        AND IDX = #{idx}
+    </select>
+
+    <insert id="insertComment" parameterType="com.example.eunsongsite.model.CommentDto">
+        INSERT INTO TB_COMMENT_SSONG (
+            IDX,
+            BOARD_IDX,
+            CONTENT,
+            WRITER,
+            DELETE_YN,
+            INSERT_DATE,
+            UPDATE_DATE,
+            DELETE_DATE
+        ) VALUES (
+                  SQ_TB_COMMENT_SSONG.NEXTVAL,
+                    #{boardIdx},
+                    #{content},
+                    #{writer},
+                    'N',
+                    SYSDATE,
+                    null,
+                    null
+        )
+    </insert>
+
+    <update id="updateComment"
+            parameterType="com.example.eunsongsite.model.CommentDto">
+        UPDATE TB_COMMENT_SSONG
+        SET
+            UPDATE_DATE = SYSDATE,
+            CONTENT = #{content},
+            WRITER = #{writer},
+        WHERE
+            IDX = #{idx}
+    </update>
+
+    <update id="deleteComment" parameterType="Long">
+        UPDATE TB_COMMENT_SSONG
+        SET
+            DELETE_YN = 'Y',
+            DELETE_DATE = SYSDATE
+        WHERE
+            IDX = #{idx}
+    </update>
+
+    <select id="selectCommentList" parameterType="com.example.eunsongsite.model.CommentDto"
+            resultType="com.example.eunsongsite.model.CommentDto">
+        SELECT
+            <include refid="commentColumns"></include>
+        FROM
+            TB_COMMENT_SSONG
+        WHERE
+            DELETE_YN = 'N'
+        AND BOARD_IDX = #{boardIdx}
+        ORDER BY
+            IDX DESC,
+            INSERT_DATE DESC
+    </select>
+
+    <select id="selectCommentTotalCount"
+            parameterType="com.example.eunsongsite.model.CommentDto"
+            resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            TB_COMMENT_SSONG
+        WHERE
+            DELETE_YN = 'N'
+        AND BOARD_IDX = #{boardIdx}
+    </select>
+</mapper>
+

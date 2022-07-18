@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.eunsi.dao.TutorialDao">
+
+    <select id="findByPublished" parameterType="String"
+            resultType="com.example.eunsi.model.Tutorial">
+        SELECT
+            ID
+             ,TITLE
+             ,DESCRIPTION
+             ,PUBLISHED
+             ,DELETE_YN
+             ,INSERT_TIME
+             ,UPDATE_TIME
+             ,DELETE_TIME
+        FROM TB_TUTORIAL_SSONG
+        WHERE DELETE_YN = 'N'
+        AND PUBLISHED = #{published}
+    </select>
+
+    <select id="findByTitleContaining" parameterType="String"
+            resultType="com.example.eunsi.model.Tutorial">
+        SELECT
+            ID
+             ,TITLE
+             ,DESCRIPTION
+             ,PUBLISHED
+             ,DELETE_YN
+             ,INSERT_TIME
+             ,UPDATE_TIME
+             ,DELETE_TIME
+        FROM TB_TUTORIAL_SSONG
+        WHERE DELETE_YN = 'N'
+        AND TITLE LIKE '%' || #{title} || '%'
+    </select>
+
+    <select id="findById" parameterType="Long"
+            resultType="com.example.eunsi.model.Tutorial">
+        SELECT
+            ID
+             ,TITLE
+             ,DESCRIPTION
+             ,PUBLISHED
+             ,DELETE_YN
+             ,INSERT_TIME
+             ,UPDATE_TIME
+             ,DELETE_TIME
+        FROM TB_TUTORIAL_SSONG
+        WHERE DELETE_YN = 'N'
+        AND ID = #{id}
+    </select>
+
+    <select id="findAll" resultType="com.example.eunsi.model.Tutorial">
+        SELECT
+            ID,
+            TITLE,
+            DESCRIPTION,
+            PUBLISHED,
+            DELETE_YN,
+            INSERT_TIME,
+            UPDATE_TIME,
+            DELETE_TIME
+        FROM TB_TUTORIAL_SSONG
+        WHERE DELETE_YN = 'N'
+    </select>
+
+    <insert id="insertTutorial"
+            parameterType="com.example.eunsi.model.Tutorial">
+        INSERT INTO TB_TUTORIAL_SSONG(
+                ID
+               ,TITLE
+               ,DESCRIPTION
+               ,PUBLISHED
+               ,INSERT_TIME
+        ) VALUES (
+                SQ_TUTORIAL_SSONG.NEXTVAL
+                 ,#{title}
+                 ,#{description}
+                 ,'Y'
+                 ,TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
+        )
+    </insert>
+
+    <update id="updateTutorial"
+            parameterType="com.example.eunsi.model.Tutorial">
+        UPDATE TB_TUTORIAL_SSONG
+        SET
+            TITLE      = #{title}
+          ,DESCRIPTION = #{description}
+          ,PUBLISHED   = DECODE(#{published},'true', 'Y', 'N')
+          ,UPDATE_TIME = TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
+        WHERE
+            ID = #{id}
+    </update>
+
+    <update id="deleteTutorial" parameterType="Long">
+        UPDATE TB_TUTORIAL_SSONG
+        SET
+            DELETE_YN    = 'Y'
+          ,DELETE_TIME = TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
+        WHERE
+            ID = #{id}
+    </update>
+
+    <update id="deleteAll">
+        UPDATE TB_TUTORIAL_SSONG
+        SET
+            DELETE_YN    = 'Y'
+          ,DELETE_TIME = TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
+    </update>
+
+
+</mapper>
+

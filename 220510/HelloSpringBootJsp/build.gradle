@@ -1,0 +1,29 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'war'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //    tomcat-embed-jasper: JSP 엔진 역할
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    //    jstl: jsp 개발을 편하게 해주는 라이브러리
+    implementation 'javax.servlet:jstl'
+    // 스프링 웹 모듈 추가
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

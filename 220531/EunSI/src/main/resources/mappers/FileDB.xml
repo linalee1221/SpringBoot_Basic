@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.eunsi.dao.FileDBDao">
+
+    <select id="findById" parameterType="String" resultType="com.example.eunsi.model.FileDB">
+        SELECT ID
+             , NAME
+             , TYPE
+             , DATA
+        FROM TB_FILES
+        WHERE ID = #{id}
+    </select>
+
+    <select id="findAll" resultType="com.example.eunsi.model.FileDB">
+        SELECT ID
+             , NAME
+             , TYPE
+             , DATA
+        FROM TB_FILES
+    </select>
+
+    <insert id="save" parameterType="com.example.eunsi.model.FileDB">
+        INSERT INTO TB_FILES( ID
+                            , NAME
+                            , TYPE
+                            , DATA)
+        VALUES ( SQ_FILES.NEXTVAL
+               , #{name}
+               , #{type}
+               , #{data})
+    </insert>
+
+</mapper>
+

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.myservice.dao.MemberDao">
+    <select id="selectAll" parameterType="com.example.myservice.model.Member"
+            resultType="com.example.myservice.model.Member">
+        SELECT
+            USER_ID AS "userId",
+            USER_NAME AS "userName",
+            USER_AUTH AS "userAuth",
+            APPEND_DATE AS "appendDate",
+            UPDATE_DATE AS "updateDate"
+        FROM TB_MEMBER
+    </select>
+
+    <insert id="insert" parameterType="com.example.myservice.model.Member">
+        INSERT INTO TB_MEMBER(
+            USER_ID,
+            USER_NAME,
+            USER_AUTH,
+            APPEND_DATE,
+            UPDATE_DATE
+        ) VALUES(
+            #{userId},
+            #{userName},
+            #{userAuth},
+            #{appendDate},
+            #{updateDate}
+        )
+    </insert>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
